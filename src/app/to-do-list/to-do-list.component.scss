@@ -1,6 +1,5 @@
-h2 {
-    text-align: center;
-    margin-top: 5%;
+.invalid-date {
+    color: red;
 }
 
 .form-container {
@@ -12,16 +11,41 @@ h2 {
     .todo-form {
         display: flex;
         flex-direction: column;
-        align-items: flex-start;
+        align-items: center;
         gap: 20px;
+
 
         textarea {
             resize: none;
+            width: 100%;
+            min-height: 100px;
+
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+
+        }
+
+        input,
+        textarea {
+            padding: 8px;
+            border-radius: 6px;
+            width: 100%;
+            box-sizing: border-box;
+            font-size: 16px;
         }
 
         button {
-            margin-left: 30%;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
         }
+
 
     }
 }

@@ -10,7 +10,7 @@ export class CheckDatePipe implements PipeTransform {
     transform(value: any, format: string = 'dd-MM-YYYY'): any {
         const dateValue = new Date(value);
         if (isNaN(dateValue.getTime())) {
-            return 'No data';
+            return 'Invalid date';
         }
         return new DatePipe('en-UK').transform(dateValue, format);
     }

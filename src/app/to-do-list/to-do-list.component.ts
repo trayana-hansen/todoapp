@@ -27,7 +27,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   imports: [CommonModule, FormsModule, RouterModule, CheckDatePipe, ReactiveFormsModule, MatInputModule, MatButtonModule, MatFormFieldModule, MatDatepickerModule, MatNativeDateModule, MatCheckboxModule, MatSnackBarModule],
   providers: [HttpClient],
   templateUrl: './to-do-list.component.html',
-  styleUrls: ['./to-do-list.component.scss']
+  styleUrls: ['./to-do-list.component.scss'],
+
 })
 export class ToDoListComponent implements OnInit {
   data: Todo[] = [];

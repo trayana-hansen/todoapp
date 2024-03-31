@@ -9,7 +9,7 @@ import { DaysSinceCreationPipe } from '../pipes/daysSinceCreation.pipe';
 
 
 @Component({
-  selector: 'details',
+  selector: 'todo-details',
   imports: [CommonModule, CheckDatePipe, DaysSinceCreationPipe],
   standalone: true,
   templateUrl: './details.component.html',

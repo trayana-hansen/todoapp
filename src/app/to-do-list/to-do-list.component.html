@@ -26,6 +26,7 @@
     </form>
 </div>
 <h2>To do's</h2>
+
 <div class="table-container">
     <table class="table">
         <thead>
@@ -44,7 +45,8 @@
                 <td style="cursor: pointer;"><a [routerLink]="['/details', todo.Id]">{{ todo.Name }}</a>
 
                 </td>
-                <td>{{ todo.Created | checkDate }}</td>
+                <td [ngClass]="{'invalid-date': (todo.Created | checkDate) === 'Invalid date'}">{{ todo.Created |
+                    checkDate }}</td>
 
             </tr>
             }
