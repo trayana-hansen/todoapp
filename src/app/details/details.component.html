@@ -1,0 +1,29 @@
+<h2>Details</h2>
+<div *ngIf="todo" class="table-container">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Done</th>
+                <th>Expenses</th>
+                <th>Created</th>
+                <th>Days Old</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ todo.Id }}</td>
+                <td>{{ todo.Name }}</td>
+                <td style="width: 30%">{{ todo.Description }}</td>
+                <td [class]="todo.Done ? 'text-success' : 'text-warning'" style="font-weight: bold;">
+                    {{ todo.Done ? 'Done' : 'Not done' }}
+                </td>
+                <td>{{ todo.Expenses | number: '1.0-2' }}</td>
+                <td>{{ todo.Created | checkDate }}</td>
+                <td>{{ todo.Created | daysSinceCreation }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

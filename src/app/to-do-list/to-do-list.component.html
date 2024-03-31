@@ -1,0 +1,53 @@
+<h2>Add a to-do</h2>
+<div class="form-container">
+    <form [formGroup]="todoForm" (ngSubmit)="onSubmit()" class="todo-form">
+        <mat-form-field appearance="fill">
+            <mat-label>Name</mat-label>
+            <input matInput formControlName="name" required>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Description</mat-label>
+            <textarea matInput formControlName="description"></textarea>
+        </mat-form-field>
+        <mat-checkbox formControlName="done">Done</mat-checkbox>
+        <mat-form-field>
+            <input matInput formControlName="expenses" placeholder="Expenses">
+            <mat-error *ngIf="todoForm.get('expenses')?.hasError('required')">Expenses information is
+                required</mat-error>
+            <mat-error *ngIf="todoForm.get('expenses')?.hasError('pattern')">Invalid expenses format</mat-error>
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput [matDatepicker]="createdPicker" formControlName="created" placeholder="Created">
+            <mat-datepicker-toggle matSuffix [for]="createdPicker"></mat-datepicker-toggle>
+            <mat-datepicker #createdPicker></mat-datepicker>
+        </mat-form-field>
+        <button mat-raised-button color="primary" type="submit">Add Todo</button>
+
+    </form>
+</div>
+<h2>To do's</h2>
+<div class="table-container">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Done</th>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Created Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for(todo of data; track todo.Id) {
+            <tr>
+                <td> <input type="checkbox" [(ngModel)]="todo.Done"></td>
+                <td>{{ todo.Id }}</td>
+                <td style="cursor: pointer;"><a [routerLink]="['/details', todo.Id]">{{ todo.Name }}</a>
+
+                </td>
+                <td>{{ todo.Created | checkDate }}</td>
+
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>
