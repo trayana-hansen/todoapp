@@ -40,7 +40,7 @@
         <tbody>
             @for(todo of data; track todo.Id) {
             <tr>
-                <td> <input type="checkbox" [(ngModel)]="todo.Done"></td>
+                <td> <input type="checkbox" [(ngModel)]="todo.Done" class="form-check-input disabled" disabled></td>
                 <td>{{ todo.Id }}</td>
                 <td style="cursor: pointer;"><a [routerLink]="['/details', todo.Id]">{{ todo.Name }}</a>
 
