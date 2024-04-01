@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
 import { catchError, tap } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { Todo } from '../todo';
@@ -17,6 +16,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TodoService } from '../todo.service';
 
 
 
@@ -25,7 +25,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   selector: 'to-do-list',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterModule, CheckDatePipe, ReactiveFormsModule, MatInputModule, MatButtonModule, MatFormFieldModule, MatDatepickerModule, MatNativeDateModule, MatCheckboxModule, MatSnackBarModule],
-  providers: [HttpClient],
+  providers: [TodoService],
   templateUrl: './to-do-list.component.html',
   styleUrls: ['./to-do-list.component.scss'],
 
@@ -35,12 +35,12 @@ export class ToDoListComponent implements OnInit {
   todoForm!: FormGroup;
   nextId: number = 7;
 
-  constructor(private httpClient: HttpClient, private router: Router, private formBuilder: FormBuilder, private snackBar: MatSnackBar) { }
+  constructor(private router: Router, private formBuilder: FormBuilder, private snackBar: MatSnackBar, private todoService: TodoService) { }
   // 
 
   ngOnInit(): void {
     this.fetchData();
-    this.todoForm! = this.formBuilder.group({
+    this.todoForm = this.formBuilder.group({
       name: ['', Validators.required],
       description: [''],
       done: [false],
@@ -50,18 +50,16 @@ export class ToDoListComponent implements OnInit {
   }
 
   fetchData() {
-    this.httpClient
-      .get<Todo[]>('https://boyumcodechallenge.azurewebsites.net/api/todolist')
-      .pipe(
-        tap((data: Todo[]) => {
-          this.data = data;
-        }),
-        catchError((error) => {
-          console.error('Error fetching todos:', error);
-          return throwError(() => error);
-        })
-      )
-      .subscribe();
+    this.todoService.getTodos().pipe(
+      catchError((error) => {
+        console.error('Error fetching todos:', error);
+        return throwError(() => error);
+      })
+    ).subscribe(
+      (todos: Todo[]) => {
+        this.data = todos;
+      }
+    );
   }
 
   onSubmit() {
@@ -76,7 +74,13 @@ export class ToDoListComponent implements OnInit {
         Created: formData.created
       };
 
-      this.addTodo(newTodo).subscribe(() => {
+      this.addTodo(newTodo);
+    }
+  }
+
+  addTodo(newTodo: Todo): void {
+    this.todoService.addTodo(newTodo).pipe(
+      tap(() => {
         this.snackBar.open('Todo added successfully', 'Close', {
           duration: 3000,
           horizontalPosition: 'center',
@@ -84,16 +88,12 @@ export class ToDoListComponent implements OnInit {
         });
         setTimeout(() => {
           this.todoForm.reset();
-        }, 5000);
-
-      }, (error) => {
+        }, 3000);
+      }),
+      catchError((error) => {
         console.error('Error adding todo:', error);
-      });
-    }
-  }
-
-  addTodo(newTodo: Todo) {
-
-    return this.httpClient.post('https://boyumcodechallenge.azurewebsites.net/api/todolist', newTodo);
+        return throwError(() => error);
+      })
+    ).subscribe();
   }
 }
