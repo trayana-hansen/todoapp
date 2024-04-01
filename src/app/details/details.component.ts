@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
 import { CheckDatePipe } from '../pipes/checkDate.pipe';
 import { DaysSinceCreationPipe } from '../pipes/daysSinceCreation.pipe';
 import { TodoService } from '../todo.service';
-import { throwError } from 'rxjs';
+
 
 
 @Component({
