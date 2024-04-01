@@ -47,7 +47,7 @@ export class ToDoListComponent implements OnInit {
     this.fetchData(); // Fetch todos on initialise
     this.todoForm = this.formBuilder.group({
       // Initialise todo form with validators
-      name: ['', Validators.required],
+      name: ['', [Validators.required, Validators.pattern(/^[a-zA-Z]*$/)]],
       description: [''],
       done: [false],
       expenses: [null, [Validators.required, Validators.pattern(/^[0-9]*$/)]],
