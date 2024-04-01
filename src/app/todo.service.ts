@@ -8,14 +8,16 @@ import { Todo } from './todo';
 })
 export class TodoService {
 
-  private api = 'https://boyumcodechallenge.azurewebsites.net/api/todolist';
+  private api = 'https://boyumcodechallenge.azurewebsites.net/api/todolist'; // API endpoint
 
   constructor(private httpClient: HttpClient) { }
 
+  // Get todos from the API
   getTodos(): Observable<Todo[]> {
     return this.httpClient.get<Todo[]>(this.api);
   }
 
+  // Add a new todo 
   addTodo(todo: Todo): Observable<any> {
     return this.httpClient.post(this.api, todo);
   }

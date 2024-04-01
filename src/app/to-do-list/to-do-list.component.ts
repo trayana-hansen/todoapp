@@ -30,42 +30,52 @@ import { TodoService } from '../todo.service';
   styleUrls: ['./to-do-list.component.scss'],
 
 })
-export class ToDoListComponent implements OnInit {
-  data: Todo[] = [];
-  todoForm!: FormGroup;
-  nextId: number = 7;
 
-  constructor(private router: Router, private formBuilder: FormBuilder, private snackBar: MatSnackBar, private todoService: TodoService) { }
-  // 
+export class ToDoListComponent implements OnInit {
+  data: Todo[] = []; // Array to store todos
+  todoForm!: FormGroup; // Form group for todo input fields
+  nextId: number = 7; // Next available todo ID bcs only 6 on the database currently
+
+  constructor(
+    private router: Router,
+    private formBuilder: FormBuilder,
+    private snackBar: MatSnackBar,
+    private todoService: TodoService
+  ) { }
 
   ngOnInit(): void {
-    this.fetchData();
+    this.fetchData(); // Fetch todos on initialise
     this.todoForm = this.formBuilder.group({
+      // Initialise todo form with validators
       name: ['', Validators.required],
       description: [''],
       done: [false],
       expenses: [null, [Validators.required, Validators.pattern(/^[0-9]*$/)]],
-      created: [new Date()]
+      created: [new Date()],
     });
   }
 
-  fetchData() {
+  fetchData(): void {
+    // Fetch with the service
     this.todoService.getTodos().pipe(
+      // Error handling
       catchError((error) => {
         console.error('Error fetching todos:', error);
         return throwError(() => error);
       })
     ).subscribe(
+      // Store the fetched data in the component
       (todos: Todo[]) => {
         this.data = todos;
       }
     );
   }
 
-  onSubmit() {
+  onSubmit(): void {
     if (this.todoForm.valid) {
       const formData = this.todoForm.value;
       const newTodo: Todo = {
+        // Create a new todo object with the data from the inputs
         Id: this.nextId++,
         Name: formData.name,
         Description: formData.description,
@@ -74,12 +84,13 @@ export class ToDoListComponent implements OnInit {
         Created: formData.created
       };
 
-      this.addTodo(newTodo);
+      this.addTodo(newTodo); // Add the new todo
     }
   }
 
   addTodo(newTodo: Todo): void {
     this.todoService.addTodo(newTodo).pipe(
+      // Success message after adding todo
       tap(() => {
         this.snackBar.open('Todo added successfully', 'Close', {
           duration: 3000,
@@ -87,13 +98,14 @@ export class ToDoListComponent implements OnInit {
           verticalPosition: 'bottom'
         });
         setTimeout(() => {
-          this.todoForm.reset();
+          this.todoForm.reset(); // Reset the todo form after 3 seconds
         }, 3000);
       }),
+      // Error handling
       catchError((error) => {
         console.error('Error adding todo:', error);
         return throwError(() => error);
       })
-    ).subscribe();
+    ).subscribe(); // Subscribe to the addTodo observable to add the new todo to the database
   }
 }
