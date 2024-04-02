@@ -51,7 +51,7 @@ export class ToDoListComponent implements OnInit {
       description: [''],
       done: [false],
       expenses: [null, [Validators.required, Validators.pattern(/^[0-9]*$/)]],
-      created: [new Date()],
+      created: [new Date(), [Validators.required]],
     });
   }
 
